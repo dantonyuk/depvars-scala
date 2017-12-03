@@ -4,7 +4,7 @@ Dependent variable is just a variable which value is changed depending on the ch
 
 E.g. we have dependent variable like this:
 
-```java
+```scala
 val httpClient = depVarContext
     .observeValues(TIMEOUT, MAX_CONN, MAX_TOTAL_CONN)
     .map {
