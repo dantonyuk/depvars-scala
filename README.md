@@ -12,14 +12,19 @@ val httpClient = depVarContext
     }
     .map {
       case (timeout, maxConn, maxTotalConn) =>
-        val connectionMgr = new MultiThreadedHttpConnectionManager()
-        val params = new HttpConnectionManagerParams()
-        params.setSoTimeout(timeout * 1000)
-        params.setConnectionTimeout(timeout * 1000)
-        params.setDefaultMaxConnectionsPerHost(maxConn)
-        params.setMaxTotalConnections(maxTotalConn)
-        connectionMgr.setParams(params)
-        val httpClient = new HttpClient(connectionMgr)
+        val httpClient = new HttpClient({
+          val connectionMgr = new MultiThreadedHttpConnectionManager()
+          connectionMgr.setParams({
+            val params = new HttpConnectionManagerParams()
+            import params._
+            setSoTimeout(timeout * 1000)
+            setConnectionTimeout(timeout * 1000)
+            setDefaultMaxConnectionsPerHost(maxConn)
+            setMaxTotalConnections(maxTotalConn)
+            params
+          })
+          connectionMgr
+        })
         httpClient.getParams.setAuthenticationPreemptive(true)
         httpClient
     }
