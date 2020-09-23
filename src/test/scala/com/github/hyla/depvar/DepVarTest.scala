@@ -36,7 +36,9 @@ class DepVarTest {
     var callCount = 0
     val state = dependentVarContext
         .observeValues("first", "second", "third")
+        // .map1(_.toInt)
         .map {
+          // case (v1, v2, v3) =>
           case List(v1, v2, v3) => (v1.toInt, v2.toInt, v3.toInt)
         }
         .map {
